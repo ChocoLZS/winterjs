@@ -66,10 +66,8 @@ jobs:
           ln -s /usr/bin/llvm-ranlib-15 /usr/bin/llvm-ranlib
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
 
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.76 --component clippy,rustfmt
           . $HOME/.cargo/env
-          rustup toolchain install 1.76
-          rustup default 1.76
 
       - name: Check out
         uses: actions/checkout@v3
