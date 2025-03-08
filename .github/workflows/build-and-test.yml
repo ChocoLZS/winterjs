@@ -66,9 +66,10 @@ jobs:
           ln -s /usr/bin/llvm-ranlib-15 /usr/bin/llvm-ranlib
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
 
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --component clippy,rustfmt --default-toolchain 1.76
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
           . $HOME/.cargo/env
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          rustup toolchain install 1.76
+          rustup default 1.76
 
       - name: Check out
         uses: actions/checkout@v3
@@ -138,11 +139,6 @@ jobs:
           file: ${{ matrix.metadata.wasix-toolchain-release-asset }}
           target: wasix-rust-toolchain/toolchain.tar.gz
 
-      # - name: Install wasix toolchain
-      #   if: ${{ matrix.metadata.target == 'wasix' }}
-      #   run: |
-
-
       - name: Build native
         if: ${{ matrix.metadata.target == 'native' }}
         run: cargo build --profile release-compact
@@ -152,6 +148,7 @@ jobs:
         # install wasix toolchain and build
         run: |
           export PATH=$HOME/.cargo/bin:$PATH
+
           cd wasix-rust-toolchain
           tar xzf toolchain.tar.gz
           chmod +x bin/*
@@ -159,7 +156,7 @@ jobs:
           chmod +x lib/rustlib/*/bin/gcc-ld/*
           rustup toolchain link wasix .
           cd ..
-          export WASI_SYSROOT=$(pwd)/sysroot/wasix-libc/sysroot32
+          export WASI_SYSROOT=${GITHUB_WORKSPACE}/sysroot/wasix-libc/sysroot32
           bash build.sh
 
       - name: Archive build
