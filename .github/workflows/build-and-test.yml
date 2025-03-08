@@ -67,6 +67,7 @@ jobs:
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
 
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --component clippy,rustfmt --default-toolchain 1.76
+          . $HOME/.cargo/env
           echo "PATH="$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
 
       - name: Check out
@@ -153,9 +154,8 @@ jobs:
 
       - name: Build wasix
         if: ${{ matrix.metadata.target == 'wasix' }}
-        # install wasix toolchain and build
         run: |
-          export WASI_SYSROOT=${GITHUB_WORKSPACE}/sysroot/wasix-libc/sysroot32
+          export WASI_SYSROOT=$(pwd)/sysroot/wasix-libc/sysroot32
           bash build.sh
 
       - name: Archive build
