@@ -139,7 +139,9 @@ jobs:
 
       - name: Build native
         if: ${{ matrix.metadata.target == 'native' }}
-        run: cargo build --profile release-compact
+        run: |
+          export PATH=$HOME/.cargo/bin:$PATH
+          cargo build --profile release-compact
 
       - name: Build wasix
         if: ${{ matrix.metadata.target == 'wasix' }}
