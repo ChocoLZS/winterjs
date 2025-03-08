@@ -14,13 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         metadata: [
-          {
-            name: "Ubuntu (x86 native)",
-            os: ubuntu-latest,
-            bin-path: target/release-compact/winterjs,
-            artifact-name: winterjs-linux-x86,
-            target: native,
-          },
+          # {
+          #   name: "Ubuntu (x86 native)",
+          #   os: ubuntu-latest,
+          #   bin-path: target/release-compact/winterjs,
+          #   artifact-name: winterjs-linux-x86,
+          #   target: native,
+          # },
           # {
           #   name: "macOS (arm native)",
           #   os: macos-latest,
@@ -66,6 +66,11 @@ jobs:
           ln -s /usr/bin/llvm-ranlib-15 /usr/bin/llvm-ranlib
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
 
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+          source $HOME/.cargo/env
+          rustup toolchain install 1.76
+          rustup default 1.76
+
       - name: Check out
         uses: actions/checkout@v3
         with:
@@ -102,11 +107,11 @@ jobs:
           echo python
           python3.11 -V
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: "1.76"
-          components: "clippy,rustfmt"
+      # - name: Install Rust
+      #   uses: dtolnay/rust-toolchain@master
+      #   with:
+      #     toolchain: "1.76"
+      #     components: "clippy,rustfmt"
 
       - name: Setup Wasmer
         if: ${{ matrix.metadata.target == 'wasix' }}
@@ -142,6 +147,8 @@ jobs:
         if: ${{ matrix.metadata.target == 'wasix' }}
         # install wasix toolchain and build
         run: |
+          export PATH=$HOME/.cargo/bin:$PATH
+
           cd wasix-rust-toolchain
           tar xzf toolchain.tar.gz
           chmod +x bin/*
