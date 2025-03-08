@@ -68,7 +68,7 @@ jobs:
 
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --component clippy,rustfmt --default-toolchain 1.76
           . $HOME/.cargo/env
-          echo "PATH="$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
+          echo "PATH=$HOME/.cargo/bin:$PATH" >> $GITHUB_ENV
 
       - name: Check out
         uses: actions/checkout@v3
