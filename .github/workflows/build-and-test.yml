@@ -67,7 +67,7 @@ jobs:
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
 
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
-          source $HOME/.cargo/env
+          . $HOME/.cargo/env
           rustup toolchain install 1.76
           rustup default 1.76
 
