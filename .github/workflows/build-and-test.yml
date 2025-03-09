@@ -181,6 +181,7 @@ jobs:
         # that cargo builds the test-suite app. This may not be the case forever.
         if: ${{ matrix.metadata.target == 'wasix' }}
         run: |
+          export PATH=$HOME/.cargo/bin:$PATH
           conc --kill-others --success "command-1" \
             "wasmer run . --net --mapdir /app:./test-suite/js-test-app/dist -- serve /app/bundle.js" \
             "sleep 10 && cd test-suite && cargo run"
@@ -191,6 +192,7 @@ jobs:
         # that cargo builds the test-suite app. This may not be the case forever.
         if: ${{ matrix.metadata.target == 'native' }}
         run: |
+          export PATH=$HOME/.cargo/bin:$PATH
           conc --kill-others --success "command-1" \
             "./target/release-compact/winterjs serve ./test-suite/js-test-app/dist/bundle.js" \
             "sleep 10 && cd test-suite && cargo run"
