@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
 
       - name: OS Setup (Ubuntu)
         if: ${{ matrix.metadata.os == 'ubuntu-latest' }}
@@ -65,7 +65,10 @@ jobs:
           ln -s /usr/bin/llvm-nm-15 /usr/bin/llvm-nm
           ln -s /usr/bin/llvm-ranlib-15 /usr/bin/llvm-ranlib
           ln -s /usr/bin/llvm-objdump-15 /usr/bin/llvm-objdump
-
+      
+      - name: Install Rust
+        # rustup toolchain install 1.76 maybe very important
+        run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
           . $HOME/.cargo/env
           rustup toolchain install 1.76
